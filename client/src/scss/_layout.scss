@@ -1,0 +1,37 @@
+.container {
+  max-width: 120rem;
+  margin-top: 4rem;
+  margin-right: 3rem;
+  min-height: 50 rem;
+}
+
+.content {
+  display: flex;
+}
+
+.header {
+  height: 7rem;
+  display: flex;
+}
+
+.sidebar {
+  margin-right: 10rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-view {
+  display: flex;
+  align-items: start;
+  flex: 0 0 45%;
+}
+
+.subscribe {
+  margin-left: 40px;
+  margin-top: 3rem;
+  flex: 0 0 23%;
+}
+
+.right-gap {
+  flex: 1;
+}
