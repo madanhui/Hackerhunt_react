@@ -5,9 +5,10 @@ a copycat application of the famous tech news website for advanced react and scs
 ```
 
 ## Features.
-```
-heroku deployment: [here](https://enigmatic-bayou-10661.herokuapp.com).
 
+heroku deployment is [here](https://enigmatic-bayou-10661.herokuapp.com).
+
+```
 https://hackerhunt.co/ is the original website i am doing my practice on.
 ```
 
