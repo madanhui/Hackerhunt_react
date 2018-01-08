@@ -30,9 +30,7 @@ const ApiList = ({ items }) => {
         </div>
         <div className="card-list__footer">
           <span className="card-list__timeStamp text-muted">
-            <Moment unix fromNow>
-              {date}
-            </Moment>{" "}
+            <Moment unix fromNow className="card-list__fromnow">{date}</Moment>
             <span className="ml-1">by</span>
             <a
               href={`https://hackerhunt.co/author/${author}`}

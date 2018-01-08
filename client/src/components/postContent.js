@@ -4,13 +4,14 @@ import ApiList from "../common/apiList";
 import TopicList from "../common/topicList";
 import Subscribe from "../common/subscribe";
 import { Link, withRouter } from "react-router-dom";
+import axios from 'axios';
 
 class PostContent extends Component {
   constructor(props) {
     super(props);
     this.state = {
       posts: [],
-      category: "popular"
+      category: "popular"  //default value to handle select behavior
     };
     this.onSelectChange = this.onSelectChange.bind(this);
     this.renderContent = this.renderContent.bind(this);
@@ -18,22 +19,21 @@ class PostContent extends Component {
 
   fetchPosts = path => {
     let page = path === "/" ? "/pages/0" : path;
-    fetch(`http://localhost:8000${page}`) //i have the proxy set to port 8000 in the package.json alredy
-      .then(res => res.json())
-      .then(res => this.setState({ posts: res.data }));
+    axios.get(`${page}`) //i have the proxy set to port 8000 in the package.json alredy
+      .then(res => this.setState({posts:res.data.data}));
   };
 
   componentDidMount() {
     this.fetchPosts(this.props.location.pathname);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {    //if the localtion changes
     if (this.props.location.pathname !== nextProps.location.pathname) {
       this.fetchPosts(nextProps.location.pathname);
     }
   }
 
-  onSelectChange(event) {
+  onSelectChange(event) {    //has not yet implemented..
     let target = event.target;
     let value = target.type === "checkbox" ? target.checked : target.value;
     let name = target.name;

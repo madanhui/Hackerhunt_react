@@ -259,23 +259,26 @@
 
   &__footer {
     display: flex;
+    flex-wrap: wrap;
   }
 
   &__keywords {
     margin-right: auto;
-    display: flex;
-    flex-wrap: wrap;
+    display: inline-block;
   }
 
   &__timeStamp {
     display: flex;
-    flex-wrap: wrap;
+    margin-right: 5px;
+    margin-bottom: 5px;
   }
 
   &__keywords-items {
-    margin-left: 10px;
+    margin-bottom: 10px;
+    margin-right: 5px;
     border: 1px solid lightgrey;
-    padding: 2px;
+    padding: 3px;
+    align-self: center;
   }
 }
 
