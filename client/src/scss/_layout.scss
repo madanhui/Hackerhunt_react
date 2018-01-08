@@ -7,6 +7,11 @@
 
 .content {
   display: flex;
+  margin-left: 10rem;
+  @media only screen and (max-width: $bp-large) {
+    margin-left: 0rem;
+    flex-direction: column;
+  }
 }
 
 .header {
@@ -15,15 +20,19 @@
 }
 
 .sidebar {
-  margin-right: 10rem;
-  display: flex;
-  flex-direction: column;
+  margin-right: 12rem;
+  @media only screen and (max-width: $bp-large) {
+    flex-direction: column;
+    margin-right: 1rem;
+  }
 }
 
 .content-view {
   display: flex;
-  align-items: start;
   flex: 0 0 45%;
+  @media only screen and (max-width: $bp-large) {
+    flex: 0 0 80%;
+  }
 }
 
 .subscribe {
