@@ -4,39 +4,42 @@ import ApiList from "../common/apiList";
 import TopicList from "../common/topicList";
 import Subscribe from "../common/subscribe";
 import { Link, withRouter } from "react-router-dom";
-import axios from 'axios';
+import axios from "axios";
 
 class PostContent extends Component {
   constructor(props) {
     super(props);
     this.state = {
       posts: [],
-      category: "popular"  //default value to handle select behavior
+      category: "" //default value to handle select behavior
     };
-    this.onSelectChange = this.onSelectChange.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
     this.renderContent = this.renderContent.bind(this);
   }
 
   fetchPosts = path => {
     let page = path === "/" ? "/pages/0" : path;
-    axios.get(`${page}`) //i have the proxy set to port 8000 in the package.json alredy
-      .then(res => this.setState({posts:res.data.data}));
+    axios
+      .get(`${page}`) //i have the proxy set to port 8000 in the package.json alredy
+      .then(res => this.setState({ posts: res.data.data }));
   };
 
   componentDidMount() {
     this.fetchPosts(this.props.location.pathname);
   }
 
-  componentWillReceiveProps(nextProps) {    //if the localtion changes
+  componentWillReceiveProps(nextProps) {
+    //if the localtion changes
     if (this.props.location.pathname !== nextProps.location.pathname) {
       this.fetchPosts(nextProps.location.pathname);
     }
   }
 
-  onSelectChange(event) {    //has not yet implemented..
-    let target = event.target;
-    let value = target.type === "checkbox" ? target.checked : target.value;
-    let name = target.name;
+  handleInputChange(event) {
+    //has not yet implemented..
+    const target = event.target;
+    const value = target.type === "checkbox" ? target.checked : target.value;
+    const name = target.name;
     this.setState({
       [name]: value
     });
@@ -63,10 +66,16 @@ class PostContent extends Component {
       return <div className="loader" />; //becasue some of hackerhunt's api contains error.
     }
 
-    const list = this.state.posts.map((items, index) => (
-      <ApiList items={items} key={items.id} />
-    ));
-    return list;
+    if (this.state.category === "newest") {
+      //not working yet, just for fun.
+      return this.state.posts
+        .reverse()
+        .map((items, index) => <ApiList items={items} key={items.id} />);
+    } else {
+      return this.state.posts
+        .sort()
+        .map((items, index) => <ApiList items={items} key={items.id} />);
+    }
   };
 
   renderPaginationButton() {
@@ -97,6 +106,7 @@ class PostContent extends Component {
   }
 
   render() {
+    console.log(this.state.category);
     return (
       <div className="content">
         <nav className="sidebar">
@@ -106,17 +116,17 @@ class PostContent extends Component {
         <main className="content-view">
           <div className="content-header">
             <span className="mb-2 content-header__text">TODAY</span>
-            <a href="" className="ml-auto content-view__item">
+            <div className="ml-auto content-view__item">
               <select
                 name="category"
                 className="mr-4 content-header__text"
-                onChange={this.onSelectChange}
+                onChange={this.handleInputChange}
               >
                 <option value="popular">POPULAR</option>
                 <option value="newest">NEWEST</option>
                 <option value="comment">COMMENT</option>
               </select>
-            </a>
+            </div>
           </div>
           {this.renderContent()}
           <div className="content-view__pagination p-5">
