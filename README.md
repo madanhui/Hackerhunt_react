@@ -6,7 +6,8 @@ a copycat application of the famous tech news website for advanced react and scs
 
 ## Features.
 ```
-heroku deployment: https://enigmatic-bayou-10661.herokuapp.com
+heroku deployment: [here](https://enigmatic-bayou-10661.herokuapp.com).
+
 https://hackerhunt.co/ is the original website i am doing my practice on.
 ```
 
@@ -35,6 +36,5 @@ $ npm install  (both in the client folder and back-end folder)
 ```
 ## Run the app:
 ```
-$ npm run server (in the back-end)
-$ npm start (in the front-end)
+$ npm run dev (in the root folder)
 ```
