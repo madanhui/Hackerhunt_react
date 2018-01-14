@@ -21,7 +21,7 @@ const Header = () => {
       </div>
       <form className="search">
         <div className="row">
-          <input type="text" className="search__input form-control" />
+          <input type="text" className="search__input form-control" placeholder="Don't have the Api for this" />
           <button className="search__button">
             <svg className="search__icon">
               <path
