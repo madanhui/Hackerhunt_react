@@ -5,7 +5,7 @@ a copycat application of the famous tech news website for advanced react and scs
 
 ## Features.
 
-heroku deployment is [here](https://enigmatic-bayou-10661.herokuapp.com).
+heroku deployment is [here](https://enigmatic-bayou-10661.herokuapp.com).  If it shows spinner, please wait for a few secs for heroku to load up my backend. It might take up to like 20 secs or so, cause heroku free deployment goes into sleep after 30mins, it takes time to restart..
 
 ```
 https://hackerhunt.co/ is the original website i am doing my practice on.
