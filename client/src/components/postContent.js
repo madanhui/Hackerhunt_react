@@ -66,34 +66,9 @@ class PostContent extends Component {
     if (!this.state.posts.length) {
       return <div className="loader" />; //becasue some of hackerhunt's api contains error.
     }
-//i know this is nasty, i am trying figure out how i can refactor this switch statement.
-    switch (this.state.category) {
-      case "newest":
-        return this.state.posts
-          .sort((a, b) => b.date - a.date) //sort by timestamp
-          .slice(0, this.state.showMore ? this.state.posts.length : 5)
-          .map((items, index) => <ApiList items={items} key={items.id} />);
-        break;
-
-      case "comment":
-        return this.state.posts
-          .sort((a, b) => b.comments - a.comments) //sort by numbers of comments
-          .slice(0, this.state.showMore ? this.state.posts.length : 5)
-          .map((items, index) => <ApiList items={items} key={items.id} />);
-        break;
-
-      case "popular":
-        return this.state.posts
-          .sort((a, b) => b.votes - a.votes) //sort by numbers of votes
-          .slice(0, this.state.showMore ? this.state.posts.length : 5)
-          .map((items, index) => <ApiList items={items} key={items.id} />);
-
-      default:
-        return this.state.posts //default
-          .slice(0, this.state.showMore ? this.state.posts.length : 5)
-          .map((items, index) => <ApiList items={items} key={items.id} />);
-        break;
-    }
+    return this.state.posts //default
+      .slice(0, this.state.showMore ? this.state.posts.length : 5)
+      .map((items, index) => <ApiList items={items} key={items.id} />);
   };
 
   renderPaginationButton() {
@@ -153,9 +128,9 @@ class PostContent extends Component {
             <a
               className="btn btn-secondary content-view__previous mr-2"
               onClick={() => this.setState({ showMore: true })}
-              >
-                Show more
-              </a>
+            >
+              Show more
+            </a>
             {this.renderPaginationButton()}
           </div>
         </main>
