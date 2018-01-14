@@ -65,8 +65,8 @@ class PostContent extends Component {
   renderContent = () => {
     if (!this.state.posts.length) {
       return <div className="loader" />; //becasue some of hackerhunt's api contains error.
-    } //i know this is nasty, i am trying figure out how i can refactor this switch statement.
-
+    }
+//i know this is nasty, i am trying figure out how i can refactor this switch statement.
     switch (this.state.category) {
       case "newest":
         return this.state.posts
@@ -150,14 +150,12 @@ class PostContent extends Component {
           </div>
           {this.renderContent()}
           <div className="content-view__pagination p-5">
-            {this.state.posts.length > 5 ? ( //If the items is less than 5, then hide this button
-              <a
-                className="btn btn-secondary content-view__previous mr-2"
-                onClick={() => this.setState({ showMore: true })}
+            <a
+              className="btn btn-secondary content-view__previous mr-2"
+              onClick={() => this.setState({ showMore: true })}
               >
                 Show more
               </a>
-            ) : null}
             {this.renderPaginationButton()}
           </div>
         </main>
