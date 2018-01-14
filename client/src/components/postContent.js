@@ -11,7 +11,7 @@ class PostContent extends Component {
     super(props);
     this.state = {
       posts: [],
-      category: "popular", //default value to handle select behavior
+      category: "", //default value to handle select behavior
       showMore: false
     };
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -37,7 +37,7 @@ class PostContent extends Component {
   }
 
   handleInputChange(event) {
-    //has not yet implemented..
+    //very slick here!
     const target = event.target;
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
@@ -65,28 +65,34 @@ class PostContent extends Component {
   renderContent = () => {
     if (!this.state.posts.length) {
       return <div className="loader" />; //becasue some of hackerhunt's api contains error.
-    }
+    } //i know this is nasty, i am trying figure out how i can refactor this switch statement.
+
     switch (this.state.category) {
       case "newest":
         return this.state.posts
-          .sort((a, b) => b.date - a.date)
+          .sort((a, b) => b.date - a.date) //sort by timestamp
           .slice(0, this.state.showMore ? this.state.posts.length : 5)
           .map((items, index) => <ApiList items={items} key={items.id} />);
         break;
+
       case "comment":
         return this.state.posts
-          .sort((a, b) => b.comments - a.comments)
+          .sort((a, b) => b.comments - a.comments) //sort by numbers of comments
           .slice(0, this.state.showMore ? this.state.posts.length : 5)
           .map((items, index) => <ApiList items={items} key={items.id} />);
+        break;
+
       case "popular":
         return this.state.posts
-          .sort((a, b) => b.votes - a.votes)
+          .sort((a, b) => b.votes - a.votes) //sort by numbers of votes
           .slice(0, this.state.showMore ? this.state.posts.length : 5)
           .map((items, index) => <ApiList items={items} key={items.id} />);
+
       default:
-        return this.state.posts
+        return this.state.posts //default
           .slice(0, this.state.showMore ? this.state.posts.length : 5)
           .map((items, index) => <ApiList items={items} key={items.id} />);
+        break;
     }
   };
 
@@ -96,13 +102,14 @@ class PostContent extends Component {
     let nextPage = currentPageNumber + 1;
 
     if (currentPath[1] && currentPath[1] !== "pages") {
+      //if the corrent path [1] is not pages, means we are dealing with a different Api route here
       //becasue hackerhunt does not provide the api for this
       return (
         //so i have to handle the route between home content and the content located in a specific topic page
         <Link //in this this way
           className="btn btn-secondary content-view__previous"
           to={`/topic/${currentPath[2]}/trending/${nextPage}`}
-          onClick={() => this.setState({ showMore: false })}
+          onClick={() => this.setState({ showMore: false, category: "" })}
         >
           Previous page
         </Link>
@@ -112,7 +119,7 @@ class PostContent extends Component {
       <Link
         className="btn btn-secondary content-view__previous"
         to={`/pages/${nextPage}`}
-        onClick={() => this.setState({ showMore: false })}
+        onClick={() => this.setState({ showMore: false, category: "" })}
       >
         Previous day
       </Link>
@@ -120,7 +127,6 @@ class PostContent extends Component {
   }
 
   render() {
-    console.log(this.state.category);
     return (
       <div className="content">
         <nav className="sidebar">
@@ -144,7 +150,7 @@ class PostContent extends Component {
           </div>
           {this.renderContent()}
           <div className="content-view__pagination p-5">
-            {this.state.posts.length > 5 ? (
+            {this.state.posts.length > 5 ? ( //If the items is less than 5, then hide this button
               <a
                 className="btn btn-secondary content-view__previous mr-2"
                 onClick={() => this.setState({ showMore: true })}
