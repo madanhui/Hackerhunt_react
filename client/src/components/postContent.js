@@ -11,7 +11,8 @@ class PostContent extends Component {
     super(props);
     this.state = {
       posts: [],
-      category: "" //default value to handle select behavior
+      category: "popular", //default value to handle select behavior
+      showMore: false
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.renderContent = this.renderContent.bind(this);
@@ -65,16 +66,27 @@ class PostContent extends Component {
     if (!this.state.posts.length) {
       return <div className="loader" />; //becasue some of hackerhunt's api contains error.
     }
-
-    if (this.state.category === "newest") {
-      //not working yet, just for fun.
-      return this.state.posts
-        .reverse()
-        .map((items, index) => <ApiList items={items} key={items.id} />);
-    } else {
-      return this.state.posts
-        .sort()
-        .map((items, index) => <ApiList items={items} key={items.id} />);
+    switch (this.state.category) {
+      case "newest":
+        return this.state.posts
+          .sort((a, b) => b.date - a.date)
+          .slice(0, this.state.showMore ? this.state.posts.length : 5)
+          .map((items, index) => <ApiList items={items} key={items.id} />);
+        break;
+      case "comment":
+        return this.state.posts
+          .sort((a, b) => b.comments - a.comments)
+          .slice(0, this.state.showMore ? this.state.posts.length : 5)
+          .map((items, index) => <ApiList items={items} key={items.id} />);
+      case "popular":
+        return this.state.posts
+          .sort((a, b) => b.votes - a.votes)
+          .slice(0, this.state.showMore ? this.state.posts.length : 5)
+          .map((items, index) => <ApiList items={items} key={items.id} />);
+      default:
+        return this.state.posts
+          .slice(0, this.state.showMore ? this.state.posts.length : 5)
+          .map((items, index) => <ApiList items={items} key={items.id} />);
     }
   };
 
@@ -90,6 +102,7 @@ class PostContent extends Component {
         <Link //in this this way
           className="btn btn-secondary content-view__previous"
           to={`/topic/${currentPath[2]}/trending/${nextPage}`}
+          onClick={() => this.setState({ showMore: false })}
         >
           Previous page
         </Link>
@@ -99,6 +112,7 @@ class PostContent extends Component {
       <Link
         className="btn btn-secondary content-view__previous"
         to={`/pages/${nextPage}`}
+        onClick={() => this.setState({ showMore: false })}
       >
         Previous day
       </Link>
@@ -130,6 +144,14 @@ class PostContent extends Component {
           </div>
           {this.renderContent()}
           <div className="content-view__pagination p-5">
+            {this.state.posts.length > 5 ? (
+              <a
+                className="btn btn-secondary content-view__previous mr-2"
+                onClick={() => this.setState({ showMore: true })}
+              >
+                Show more
+              </a>
+            ) : null}
             {this.renderPaginationButton()}
           </div>
         </main>
