@@ -1,12 +1,17 @@
 import React, { Component } from "react";
+
 import topics from "../assets/topics.json"; //categories list. just in case the app goes better,its more maintainable
 import categories from "../assets/preferences.json"; //categories list. just in case the app goes better,its more maintainable
+
 import ApiList from "../common/apiList";
 import TopicList from "../common/topicList";
 import Subscribe from "../common/subscribe";
-import FilteredList from "../util/onPreference"; //utility function to filter list of posts.
+
 import { Link, withRouter } from "react-router-dom";
 import axios from "axios";
+
+import FilteredList from "../util/onPreference"; //utility function to filter list of posts.
+import OnLocationChanged from "../util/onLocationChange"; //utility function to detect when path has changed
 
 class PostContent extends Component {
   constructor(props) {
@@ -14,7 +19,7 @@ class PostContent extends Component {
     this.state = {
       posts: [],
       selectedCategory: "", //default value to handle select behavior
-      showMore: false
+      showMore: false //wether to show all the content for pagination;
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.renderContent = this.renderContent.bind(this);
@@ -33,18 +38,16 @@ class PostContent extends Component {
 
   componentWillReceiveProps(nextProps) {
     //if the localtion changes
-    let originPath = this.props.location.pathname.split("/");   //current page number
-    let originPageNumber = Number(originPath[originPath.length - 1]); //to isolate the number from the path
+    let currentLocation = this.props.location.pathname;
+    let nextLocation = nextProps.location.pathname;
 
-    let nextPath=nextProps.location.pathname.split("/");   //updated page path
-    let nextPageNumber = Number(nextPath[nextPath.length - 1]); //to isolate the number from the path
-    
-    if(originPageNumber!==nextPageNumber){    //only want this function to run if page number changes instead of the overall path.
-      this.fetchPosts(nextProps.location.pathname); //this is to improve performance
+    if (OnLocationChanged(currentLocation, nextLocation)) {
+      //this is a utility function that returns a true or false.
+      this.fetchPosts(nextLocation); //the main purpose of this instead of the one below is to improve performance
     }
     //if (this.props.location.pathname !== nextProps.location.pathname) {
-    //  this.fetchPosts(nextProps.location.pathname);   //this is also ok, but it slows down the performance of the website,and cause bugs.
-    //}
+    //      this.fetchPosts(nextProps.location.pathname); //this is also ok
+    //}     //but it slows down the performance of the website,and cause bugs.
   }
 
   handleInputChange(event) {
@@ -58,20 +61,20 @@ class PostContent extends Component {
   }
 
   renderTopics() {
-    return topics.map((items, index) =>
+    return topics.map((items, index) => (
       <TopicList
         items={items}
         key={items.name}
         onTopicSelect={() => this.onTopicSelect.bind(this, items.value)}
       />
-    )
+    ));
   }
 
-  renderOptions(){
-    return categories.map((item,index)=>
-    <option value={item.value}>{item.text}</option>
-  )
-}
+  renderOptions() {
+    return categories.map((item, index) => (
+      <option value={item.value}>{item.text}</option>
+    ));
+  }
 
   onTopicSelect(name) {
     let destination = `/topic/${name.toLowerCase()}/trending/0`;
@@ -100,7 +103,7 @@ class PostContent extends Component {
         <Link //in this this way
           className="btn btn-secondary content-view__previous"
           to={`/topic/${currentPath[2]}/trending/${nextPage}`}
-          onClick={() => this.setState({ showMore: false})}
+          onClick={() => this.setState({ showMore: false })}
         >
           Previous page
         </Link>
@@ -110,7 +113,7 @@ class PostContent extends Component {
       <Link
         className="btn btn-secondary content-view__previous"
         to={`/pages/${nextPage}`}
-        onClick={() => this.setState({ showMore: false})}
+        onClick={() => this.setState({ showMore: false })}
       >
         Previous day
       </Link>
@@ -118,8 +121,6 @@ class PostContent extends Component {
   }
 
   render() {
-    let currentPath = this.props.location.pathname.split("/");
-    console.log(currentPath);
     return (
       <div className="content">
         <nav className="sidebar">
